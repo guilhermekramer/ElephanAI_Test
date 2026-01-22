@@ -25,7 +25,7 @@ export default function CharacterCard({ character, isFavorite, onToggleFavorite,
       className={cn(
         "group overflow-hidden bg-card border-0 shadow-md",
         "transition-all duration-300 ease-out",
-        "hover:shadow-xl hover:shadow-primary/10 hover:-translate-y-1",
+        "hover:shadow-xl hover:-translate-y-1",
         onClick && "cursor-pointer"
       )}
       onClick={() => onClick?.(character)}
@@ -79,13 +79,13 @@ export default function CharacterCard({ character, isFavorite, onToggleFavorite,
       </div>
 
       <div className="p-4 space-y-2">
-        <div className="flex items-start gap-2 text-sm text-muted-foreground">
-          <MapPin className="h-4 w-4 mt-0.5 shrink-0" />
+        <div className="flex items-start gap-2 text-base text-muted-foreground">
+          <MapPin className="h-5 w-5 mt-0.5 shrink-0" />
           <span className="truncate" title={character.location.name}>
             {character.location.name}
           </span>
         </div>
-        <p className="text-xs text-muted-foreground/70">
+        <p className="text-sm text-muted-foreground/80">
           Featured in {character.episode.length} episode{character.episode.length !== 1 ? 's' : ''}
         </p>
       </div>
