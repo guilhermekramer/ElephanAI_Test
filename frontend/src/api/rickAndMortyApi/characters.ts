@@ -1,27 +1,12 @@
 import rickAndMortyApi from '../rickAndMortyApi/index';
+import type { Character, CharactersResponse } from './../../types/types';
 
-export const getCharacters = async (page: number = 1) => {
-  try{
-    const response = await rickAndMortyApi.get('/character', { params: { page }});
-    if (response.status === 200) {
-      return response.data;
-    }
-  }catch(error){
-    console.error('[API] Error fetching characters:', error);
-    return null;
-  }
-  
+export async function getCharacters( page: number = 1 ): Promise<CharactersResponse> {
+  const { data } = await rickAndMortyApi.get<CharactersResponse>( '/character', { params: { page }, })
+  return data
 }
 
-export const getCharacterById = async (id: number) => {
-  try{
-    const response = await rickAndMortyApi.get(`/character/${id}`);
-    if (response.status === 200) {
-      return response.data;
-    }
-  }catch(error){
-    console.error(`[API] Error fetching character with id ${id}:`, error);
-    return null;
-  }
+export async function getCharacterById( id: number ): Promise<Character> {
+  const { data } = await rickAndMortyApi.get<Character>( `/character/${id}`)
+  return data
 }
-
