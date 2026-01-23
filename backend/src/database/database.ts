@@ -24,3 +24,7 @@ export function getDb(): Db {
   if (!db) throw new Error("Database not connected")
   return db
 }
+
+export function setDb(database: Db): void {
+  db = database
+}
