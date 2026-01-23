@@ -36,13 +36,13 @@ export default function CharacterCard({ character, isFavorite, onToggleFavorite,
           alt={character.name}
           className="w-full aspect-square object-cover transition-transform duration-300 group-hover:scale-105"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+        <div className="absolute inset-0 from-black/60 via-transparent to-transparent" />
 
         <Button
           variant="ghost"
           size="icon"
           className={cn(
-            "absolute top-3 right-3 rounded-full backdrop-blur-sm",
+            "absolute top-1.5 right-1.5 sm:top-2 sm:right-2 h-7 w-7 sm:h-8 sm:w-8 rounded-full backdrop-blur-sm",
             "bg-white/20 hover:bg-white/40 border border-white/30",
             "transition-all duration-200 hover:scale-110"
           )}
@@ -53,7 +53,7 @@ export default function CharacterCard({ character, isFavorite, onToggleFavorite,
         >
           <Heart
             className={cn(
-              "h-5 w-5 transition-all duration-200",
+              "h-3.5 w-3.5 sm:h-4 sm:w-4 transition-all duration-200",
               isFavorite
                 ? "fill-red-500 text-red-500 scale-110"
                 : "text-white hover:text-red-400"
@@ -61,32 +61,32 @@ export default function CharacterCard({ character, isFavorite, onToggleFavorite,
           />
         </Button>
 
-        <div className="absolute bottom-3 left-3 right-3">
-          <div className="flex items-center gap-2 mb-1">
+        <div className="absolute bottom-1.5 left-1.5 right-1.5 sm:bottom-2 sm:left-2 sm:right-2">
+          <div className="flex items-center gap-1 sm:gap-1.5 mb-0.5">
             <span className={cn(
-              "h-2.5 w-2.5 rounded-full ring-4",
+              "h-2 w-2 rounded-full ring-2 sm:ring-4",
               status.color,
               status.ring
             )} />
-            <span className="text-xs font-medium text-white/90 uppercase tracking-wide">
-              {character.status} - {character.species}
+            <span className="text-[10px] sm:text-xs font-medium text-white/90 uppercase tracking-wide">
+              {character.status}
             </span>
           </div>
-          <h3 className="font-bold text-lg text-white truncate drop-shadow-lg" title={character.name}>
+          <h3 className="font-bold text-sm sm:text-base text-white truncate drop-shadow-lg" title={character.name}>
             {character.name}
           </h3>
         </div>
       </div>
 
-      <div className="p-4 space-y-2">
-        <div className="flex items-start gap-2 text-base text-muted-foreground">
-          <MapPin className="h-5 w-5 mt-0.5 shrink-0" />
+      <div className="p-2 sm:p-3 space-y-1">
+        <div className="flex items-start gap-1.5 text-xs sm:text-sm text-muted-foreground">
+          <MapPin className="h-3.5 w-3.5 sm:h-4 sm:w-4 mt-0.5 shrink-0" />
           <span className="truncate" title={character.location.name}>
             {character.location.name}
           </span>
         </div>
-        <p className="text-sm text-muted-foreground/80">
-          Featured in {character.episode.length} episode{character.episode.length !== 1 ? 's' : ''}
+        <p className="text-[10px] sm:text-xs text-muted-foreground/80">
+          {character.episode.length} episode{character.episode.length !== 1 ? 's' : ''}
         </p>
       </div>
     </Card>

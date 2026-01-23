@@ -17,6 +17,7 @@ import { getCharacters } from "@/api/rickAndMortyApi/characters"
 import nodeApi from "@/api/nodeApi"
 import type { Character } from "@/types/types"
 import { cn } from "@/lib/utils"
+import logo from "@/assets/Rick-and-Morty.png"
 
 function useDebounce<T>(value: T, delay: number): T {
   const [debouncedValue, setDebouncedValue] = useState(value)
@@ -95,21 +96,23 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-3 sm:px-4 py-4 sm:py-8">
         <header className="mb-8">
-          <div className="flex justify-end mb-4">
+          <div className="flex justify-end mb-2 sm:mb-4">
             <ThemeToggle />
           </div>
-          <h1 className="text-4xl font-bold text-center mb-6 text-foreground">Rick and Morty Characters</h1>
-          <div className="relative max-w-xl mx-auto">
+          <div className="mb-4 sm:mb-6 items-center justify-center flex">
+            <img src={logo} alt="Rick and Morty" className="h-32 sm:h-60" />
+          </div>
+          <div className="relative w-full max-w-xl mx-auto px-2 sm:px-0">
             <div className="relative flex items-center">
-              <Search className="absolute left-4 h-5 w-5 text-muted-foreground pointer-events-none" />
+              <Search className="absolute left-4 sm:left-4 h-5 w-5 text-muted-foreground pointer-events-none" />
               <Input
                 type="text"
                 placeholder="Search characters..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="pl-12 pr-12 h-12 rounded-full shadow-lg border-2 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+                className="pl-10 sm:pl-12 pr-10 sm:pr-12 h-11 sm:h-12 rounded-full shadow-lg border-2 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
               />
               {search && (
                 <Button
@@ -126,12 +129,12 @@ export default function HomePage() {
         </header>
 
         {isLoadingCharacters ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {Array.from({ length: 8 }).map((_, i) => (
-              <div key={i} className="space-y-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
+            {Array.from({ length: 10 }).map((_, i) => (
+              <div key={i} className="space-y-2">
                 <Skeleton className="aspect-square w-full rounded-lg" />
-                <Skeleton className="h-4 w-3/4" />
-                <Skeleton className="h-4 w-1/2" />
+                <Skeleton className="h-3 w-3/4" />
+                <Skeleton className="h-3 w-1/2" />
               </div>
             ))}
           </div>
@@ -143,7 +146,7 @@ export default function HomePage() {
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
               {charactersData?.results.map((character, index) => (
                 <div
                   key={character.id}
@@ -160,25 +163,29 @@ export default function HomePage() {
               ))}
             </div>
 
-            <div className="flex justify-center items-center gap-4 mt-8">
+            <div className="flex justify-center items-center gap-2 sm:gap-4 mt-6 sm:mt-8">
               <Button
                 variant="outline"
+                size="sm"
+                className="sm:size-default"
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
                 disabled={page === 1}
               >
-                <ChevronLeft className="h-4 w-4 mr-1" />
-                Previous
+                <ChevronLeft className="h-4 w-4" />
+                <span className="hidden sm:inline ml-1">Previous</span>
               </Button>
-              <span className="text-sm text-muted-foreground">
+              <span className="text-xs sm:text-sm text-muted-foreground">
                 Page {page} of {totalPages}
               </span>
               <Button
                 variant="outline"
+                size="sm"
+                className="sm:size-default"
                 onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                 disabled={page === totalPages}
               >
-                Next
-                <ChevronRight className="h-4 w-4 ml-1" />
+                <span className="hidden sm:inline mr-1">Next</span>
+                <ChevronRight className="h-4 w-4" />
               </Button>
             </div>
           </>
@@ -186,61 +193,61 @@ export default function HomePage() {
       </div>
 
       <Dialog open={!!selectedCharacter} onOpenChange={(open) => !open && setSelectedCharacter(null)}>
-        <DialogContent className="sm:max-w-xl p-8 bg-card text-card-foreground">
+        <DialogContent className="max-w-[calc(100%-1rem)] sm:max-w-xl p-4 sm:p-8 bg-card text-card-foreground">
           {selectedCharacter && (
             <>
-              <div className="flex gap-6">
+              <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
                 <img
                   src={selectedCharacter.image}
                   alt={selectedCharacter.name}
-                  className="w-40 h-40 rounded-lg object-cover shrink-0"
+                  className="w-24 h-24 sm:w-40 sm:h-40 rounded-lg object-cover shrink-0 mx-auto sm:mx-0"
                 />
-                <div className="flex flex-col justify-center min-w-0">
+                <div className="flex flex-col justify-center min-w-0 text-center sm:text-left">
                   <DialogHeader className="space-y-1">
-                    <DialogTitle className="text-3xl font-bold truncate text-foreground">
+                    <DialogTitle className="text-xl sm:text-3xl font-bold truncate text-foreground">
                       {selectedCharacter.name}
                     </DialogTitle>
                   </DialogHeader>
-                  <div className="flex items-center gap-2 mt-2">
+                  <div className="flex items-center justify-center sm:justify-start gap-2 mt-2">
                     <span className={cn(
                       "h-3 w-3 rounded-full shrink-0",
                       selectedCharacter.status === "Alive" && "bg-green-500",
                       selectedCharacter.status === "Dead" && "bg-red-500",
                       selectedCharacter.status === "unknown" && "bg-gray-400"
                     )} />
-                    <span className="text-base text-muted-foreground">
+                    <span className="text-sm sm:text-base text-muted-foreground">
                       {selectedCharacter.status} - {selectedCharacter.species}
                     </span>
                   </div>
-                  <p className="text-base text-muted-foreground mt-1">{selectedCharacter.gender}</p>
+                  <p className="text-sm sm:text-base text-muted-foreground mt-1">{selectedCharacter.gender}</p>
                 </div>
               </div>
 
               <Separator />
 
-              <div className="space-y-4">
+              <div className="space-y-3 sm:space-y-4">
                 <div className="space-y-1">
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground uppercase tracking-wide">
+                  <div className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground uppercase tracking-wide">
                     <MapPin className="h-4 w-4" />
                     Origin
                   </div>
-                  <p className="text-lg font-medium text-foreground">{selectedCharacter.origin.name}</p>
+                  <p className="text-base sm:text-lg font-medium text-foreground">{selectedCharacter.origin.name}</p>
                 </div>
 
                 <div className="space-y-1">
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground uppercase tracking-wide">
+                  <div className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground uppercase tracking-wide">
                     <MapPin className="h-4 w-4" />
                     Last Known Location
                   </div>
-                  <p className="text-lg font-medium text-foreground">{selectedCharacter.location.name}</p>
+                  <p className="text-base sm:text-lg font-medium text-foreground">{selectedCharacter.location.name}</p>
                 </div>
 
                 <div className="space-y-1">
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground uppercase tracking-wide">
+                  <div className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground uppercase tracking-wide">
                     <Tv className="h-4 w-4" />
                     Episodes
                   </div>
-                  <p className="text-lg font-medium text-foreground">Featured in {selectedCharacter.episode.length} episode{selectedCharacter.episode.length !== 1 ? 's' : ''}</p>
+                  <p className="text-base sm:text-lg font-medium text-foreground">Featured in {selectedCharacter.episode.length} episode{selectedCharacter.episode.length !== 1 ? 's' : ''}</p>
                 </div>
               </div>
 
