@@ -3,6 +3,7 @@ import {
   getAllFavorites,
   addFavorite,
   removeFavorite,
+  type Character,
 } from "../repository/favoritesRepository.js"
 
 interface IdParams {
@@ -15,14 +16,14 @@ export async function getFavorites() {
 }
 
 export async function createFavorite(
-  request: FastifyRequest<{ Params: IdParams }>,
+  request: FastifyRequest<{ Body: Character }>,
   reply: FastifyReply
 ) {
-  const characterId = parseInt(request.params.id, 10)
-  if (isNaN(characterId)) {
-    return reply.status(400).send({ error: "Invalid character ID" })
+  const character = request.body
+  if (!character || typeof character.id !== "number") {
+    return reply.status(400).send({ error: "Invalid character data" })
   }
-  await addFavorite(characterId)
+  await addFavorite(character)
   return reply.status(201).send({ success: true })
 }
 

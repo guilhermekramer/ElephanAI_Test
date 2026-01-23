@@ -7,6 +7,6 @@ import {
 
 export async function favoritesRoutes(fastify: FastifyInstance) {
   fastify.get("/favorites", getFavorites)
-  fastify.post("/favorites/:id", createFavorite)
+  fastify.post("/favorites", createFavorite)
   fastify.delete("/favorites/:id", deleteFavorite)
 }
