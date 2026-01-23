@@ -1,5 +1,16 @@
 {
+  "type": "module",
   "dependencies": {
+    "@fastify/cors": "^11.2.0",
+    "@fastify/mongodb": "^9.0.2",
     "fastify": "^5.7.1"
+  },
+  "devDependencies": {
+    "@types/node": "^25.0.10",
+    "typescript": "^5.9.3"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/server.js"
   }
 }
