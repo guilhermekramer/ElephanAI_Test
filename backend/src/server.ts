@@ -1,14 +1,15 @@
 import fastify from "fastify"
 import cors from "@fastify/cors"
-import { connect } from "./repository/database"
-import { createIndexes } from "./repository/favoritesRepository"
-import { favoritesRoutes } from "./routes/favorites"
+import { connect } from "./database/database.js"
+import { createIndexes } from "./repository/favoritesRepository.js"
+import { favoritesRoutes } from "./routes/favorites.js"
 
 const server = fastify()
 
 async function start() {
   await server.register(cors, {
     origin: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   })
 
   await connect()
@@ -20,7 +21,7 @@ async function start() {
     return "pong\n"
   })
 
-  server.listen({ port: 8080 }, (err, address) => {
+  server.listen({ port: 8080, host: "0.0.0.0" }, (err, address) => {
     if (err) {
       console.error(err)
       process.exit(1)
