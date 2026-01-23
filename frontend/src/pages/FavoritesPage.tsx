@@ -1,6 +1,5 @@
 import { useState } from "react"
 import { Link } from "react-router-dom"
-import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
 import {
@@ -10,82 +9,45 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import { Separator } from "@/components/ui/separator"
-import { ChevronLeft, ChevronRight, Search, X, MapPin, Tv, Heart } from "lucide-react"
+import { ArrowLeft, MapPin, Tv, Heart } from "lucide-react"
 import CharacterCard from "@/components/CharacterCard"
 import { ThemeToggle } from "@/components/ThemeToggle"
-import { useFavorites, useCharacters } from "@/hooks"
+import { useFavorites } from "@/hooks"
 import type { Character } from "@/types/types"
 import { cn } from "@/lib/utils"
-import logo from "@/assets/Rick-and-Morty.png"
 
-export default function HomePage() {
+export default function FavoritesPage() {
   const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null)
 
-  const {
-    characters: charactersData,
-    isLoading: isLoadingCharacters,
-    isError: isCharactersError,
-    page,
-    search,
-    setSearch,
-    debouncedSearch,
-    totalPages,
-    nextPage,
-    prevPage,
-    hasNextPage,
-    hasPrevPage,
-  } = useCharacters()
-
-  const { favoriteIds, toggleFavorite } = useFavorites()
+  const { favorites, favoriteIds, isLoading, toggleFavorite } = useFavorites()
 
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-3 sm:px-4 py-4 sm:py-8">
         <header className="mb-8">
-          <div className="flex justify-end items-center gap-2 mb-2 sm:mb-4">
-            <Link to="/favorites">
-              <Button variant="outline" size="sm" className="gap-2">
-                <Heart className="h-4 w-4" />
-                <span className="hidden sm:inline">Favorites</span>
-                {favoriteIds.size > 0 && (
-                  <span className="bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                    {favoriteIds.size}
-                  </span>
-                )}
+          <div className="flex justify-between items-center mb-4 sm:mb-6">
+            <Link to="/">
+              <Button variant="ghost" size="sm" className="gap-2">
+                <ArrowLeft className="h-4 w-4" />
+                <span className="hidden sm:inline">Back to Home</span>
               </Button>
             </Link>
             <ThemeToggle />
           </div>
-          <div className="mb-4 sm:mb-6 items-center justify-center flex">
-            <img src={logo} alt="Rick and Morty" className="h-32 sm:h-60" />
-          </div>
-          <div className="relative w-full max-w-xl mx-auto px-2 sm:px-0">
-            <div className="relative flex items-center">
-              <Search className="absolute left-4 sm:left-4 h-5 w-5 text-muted-foreground pointer-events-none" />
-              <Input
-                type="text"
-                placeholder="Search characters..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="pl-10 sm:pl-12 pr-10 sm:pr-12 h-11 sm:h-12 rounded-full shadow-lg border-2 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
-              />
-              {search && (
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="absolute right-2 h-8 w-8 rounded-full"
-                  onClick={() => setSearch("")}
-                >
-                  <X className="h-4 w-4" />
-                </Button>
-              )}
-            </div>
+          <div className="text-center">
+            <h1 className="text-2xl sm:text-4xl font-bold text-foreground flex items-center justify-center gap-2">
+              <Heart className="h-6 w-6 sm:h-8 sm:w-8 fill-red-500 text-red-500" />
+              My Favorites
+            </h1>
+            <p className="text-muted-foreground mt-2">
+              {favoriteIds.size} character{favoriteIds.size !== 1 ? 's' : ''} saved
+            </p>
           </div>
         </header>
 
-        {isLoadingCharacters ? (
+        {isLoading ? (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
-            {Array.from({ length: 10 }).map((_, i) => (
+            {Array.from({ length: 5 }).map((_, i) => (
               <div key={i} className="space-y-2">
                 <Skeleton className="aspect-square w-full rounded-lg" />
                 <Skeleton className="h-3 w-3/4" />
@@ -93,57 +55,33 @@ export default function HomePage() {
               </div>
             ))}
           </div>
-        ) : isCharactersError ? (
-          <div className="text-center py-12">
-            <p className="text-muted-foreground text-lg">
-              {debouncedSearch ? `No characters found for "${debouncedSearch}"` : "Failed to load characters"}
+        ) : favoriteIds.size === 0 ? (
+          <div className="text-center py-16">
+            <Heart className="h-16 w-16 mx-auto text-muted-foreground/30 mb-4" />
+            <p className="text-muted-foreground text-lg mb-4">
+              You haven't added any favorites yet
             </p>
+            <Link to="/">
+              <Button>Browse Characters</Button>
+            </Link>
           </div>
         ) : (
-          <>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
-              {charactersData?.results.map((character, index) => (
-                <div
-                  key={character.id}
-                  className="animate-in fade-in slide-in-from-bottom-4 fill-mode-both"
-                  style={{ animationDelay: `${index * 50}ms`, animationDuration: "400ms" }}
-                >
-                  <CharacterCard
-                    character={character}
-                    isFavorite={favoriteIds.has(character.id)}
-                    onToggleFavorite={toggleFavorite}
-                    onClick={setSelectedCharacter}
-                  />
-                </div>
-              ))}
-            </div>
-
-            <div className="flex justify-center items-center gap-2 sm:gap-4 mt-6 sm:mt-8">
-              <Button
-                variant="outline"
-                size="sm"
-                className="sm:size-default"
-                onClick={prevPage}
-                disabled={!hasPrevPage}
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
+            {favorites?.map((character, index) => (
+              <div
+                key={character.id}
+                className="animate-in fade-in slide-in-from-bottom-4 fill-mode-both"
+                style={{ animationDelay: `${index * 50}ms`, animationDuration: "400ms" }}
               >
-                <ChevronLeft className="h-4 w-4" />
-                <span className="hidden sm:inline ml-1">Previous</span>
-              </Button>
-              <span className="text-xs sm:text-sm text-muted-foreground">
-                Page {page} of {totalPages}
-              </span>
-              <Button
-                variant="outline"
-                size="sm"
-                className="sm:size-default"
-                onClick={nextPage}
-                disabled={!hasNextPage}
-              >
-                <span className="hidden sm:inline mr-1">Next</span>
-                <ChevronRight className="h-4 w-4" />
-              </Button>
-            </div>
-          </>
+                <CharacterCard
+                  character={character}
+                  isFavorite={favoriteIds.has(character.id)}
+                  onToggleFavorite={toggleFavorite}
+                  onClick={setSelectedCharacter}
+                />
+              </div>
+            ))}
+          </div>
         )}
       </div>
 

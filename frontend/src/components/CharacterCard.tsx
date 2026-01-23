@@ -7,7 +7,7 @@ import type { Character } from "@/types/types"
 interface CharacterCardProps {
   character: Character
   isFavorite: boolean
-  onToggleFavorite: (characterId: number) => void
+  onToggleFavorite: (character: Character) => void
   onClick?: (character: Character) => void
 }
 
@@ -48,7 +48,7 @@ export default function CharacterCard({ character, isFavorite, onToggleFavorite,
           )}
           onClick={(e) => {
             e.stopPropagation()
-            onToggleFavorite(character.id)
+            onToggleFavorite(character)
           }}
         >
           <Heart
