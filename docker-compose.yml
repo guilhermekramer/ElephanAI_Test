@@ -10,10 +10,9 @@ services:
     build: ./backend
     ports:
       - "8080:8080"
-    env_file:
-      - ./backend/.env
     environment:
-      MONGO_URI: mongodb://mongo:27017
+      - MONGO_URI=mongodb://mongo:27017
+      - PORT=8080
     depends_on:
       - mongo
 
@@ -21,8 +20,9 @@ services:
     build: ./frontend
     ports:
       - "5173:5173"
-    env_file:
-      - ./frontend/.env
+    environment:
+      - VITE_API_URL=http://localhost:8080
+      - VITE_RICK_AND_MORTY_API=https://rickandmortyapi.com/api
     depends_on:
       - backend
 
